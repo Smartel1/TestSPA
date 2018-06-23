@@ -38,15 +38,22 @@ class ArticlesController extends Controller
     }
 
 
-    public function createArticle(CreateArticleRequest $request){
-
+    public function create(CreateArticleRequest $request){
+        Article::create($request->all());
+        return 'success';
     }
 
-    public function editArticle(EditArticleRequest $request){
-
+    public function edit(Article $article, EditArticleRequest $request){
+        $article->update($request->toArray());
+        return 'success';
     }
 
-    public function deleteArticle(Article $article){
-
+    public function delete(Article $article){
+        try {
+            $article->delete();
+        } catch (\Exception $e) {
+            return 'fail';
+        }
+        return 'success';
     }
 }

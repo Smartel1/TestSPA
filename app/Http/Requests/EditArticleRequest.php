@@ -24,7 +24,6 @@ class EditArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required',
             'title' => 'required',
             'body' => 'required',
         ];
