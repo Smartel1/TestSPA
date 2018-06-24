@@ -44,7 +44,7 @@ class ArticlesController extends Controller
     }
 
     public function edit(Article $article, EditArticleRequest $request){
-        $article->update($request->toArray());
+        $article->update($request->all());
         return 'success';
     }
 
