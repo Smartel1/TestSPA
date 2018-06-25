@@ -47,7 +47,7 @@
         data: function(){
             return {
                 articles: [],
-                article_to_delete: 0
+                article_to_delete: 0 //id статьи, которую удаляем
             }
         },
         methods: {

@@ -13993,26 +13993,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ArticleEditor_vue__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ArticleEditor_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_ArticleEditor_vue__);
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 __webpack_require__(14);
 
 window.Vue = __webpack_require__(37);
 
 window.Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]);
 
+ //список новостей
+ //просмотр статьи
+ //редактор статьи
 
-
-
-
+//маршруты
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
     routes: [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_1__components_ArticlesList_vue___default.a, name: 'list' }, { path: '/article/create', component: __WEBPACK_IMPORTED_MODULE_3__components_ArticleEditor_vue___default.a, name: 'create' }, { path: '/article/:id', component: __WEBPACK_IMPORTED_MODULE_2__components_ArticleViewer_vue___default.a, name: 'article', props: true }, { path: '/article/:id/edit', component: __WEBPACK_IMPORTED_MODULE_3__components_ArticleEditor_vue___default.a, name: 'edit', props: true }]
 });
-var app = new Vue({
+new Vue({
     el: '#app',
     router: router
 });
@@ -50001,7 +49996,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             articles: [],
-            article_to_delete: 0
+            article_to_delete: 0 //id статьи, которую удаляем
         };
     },
     methods: {
@@ -50294,6 +50289,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         edit: function edit(id) {
+            //переходим к редактированию статьи
             this.$router.push({ name: 'edit', params: { id: id } });
         },
         modal_show: function modal_show() {
@@ -50302,6 +50298,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         del: function del() {
             var _this = this;
 
+            //удаляем статью и возвращаемся "домой"
             axios.get('api/article/' + this.id + '/delete').then(function (response) {
                 _this.$router.push({ name: 'list' });
             }).catch(function (response) {
@@ -50312,6 +50309,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['id'],
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
         next(function (vm) {
+            //инициализация данными с сервера
             axios.get('api/article/' + vm.id).then(function (response) {
                 vm.title = response.data.title;
                 vm.body = response.data.body;

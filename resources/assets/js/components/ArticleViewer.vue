@@ -47,12 +47,14 @@
         },
         methods: {
             edit: function (id) {
+                //переходим к редактированию статьи
                 this.$router.push({name: 'edit', params: {id}});
             },
             modal_show: function(){
                 $('#Modal').modal({});
             },
             del: function () {
+                //удаляем статью и возвращаемся "домой"
                 axios.get('api/article/'+this.id+'/delete')
                     .then(response => {
                         this.$router.push({name: 'list'});
@@ -65,6 +67,7 @@
         props: ['id'],
         beforeRouteEnter(to, from, next) {
             next(vm=>{
+                //инициализация данными с сервера
                 axios.get('api/article/'+vm.id,)
                     .then(response => {
                         vm.title=response.data.title;
