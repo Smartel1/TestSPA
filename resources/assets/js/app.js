@@ -14,14 +14,17 @@ window.Vue.use(VueRouter);
 
 import ArticlesList from './components/ArticlesList.vue';
 import ArticleViewer from './components/ArticleViewer.vue';
+import ArticleEditor from './components/ArticleEditor.vue';
 
 const router = new VueRouter({
     routes: [
-        {path: '', component: ArticlesList, name: 'list'},
-        {path: 'article/:id', component: ArticleViewer, name: 'article', props: true}
+        {path: '/', component: ArticlesList, name: 'list'},
+        {path: '/article/create', component: ArticleEditor, name: 'create'},
+        {path: '/article/:id', component: ArticleViewer, name: 'article', props: true},
+        {path: '/article/:id/edit', component: ArticleEditor, name: 'edit', props: true},
     ]
 });
-const app = new Vue({
+var app = new Vue({
     el: '#app',
     router: router
 });

@@ -16,8 +16,11 @@ class ArticlesController extends Controller
      */
     public function articles(){
         $short_articles = Article::all()->map(function ($article){
-            $short_body = substr($article->body, 0, 400);
-            $article->body=$short_body;
+            //сокращение тела статьи до 440 символов
+            if (strlen($article->body)>440) {
+                $short_body = substr($article->body, 0, 440);
+                $article->body=$short_body.'...';
+            }
             return $article;
         });
         return $short_articles->toJson();
