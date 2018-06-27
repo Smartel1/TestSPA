@@ -49991,6 +49991,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -50005,10 +50006,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         edit: function edit(id) {
             this.$router.push({ name: 'edit', params: { id: id } });
-        },
-        modal_show: function modal_show(id) {
-            $('#Modal').modal({});
-            this.article_to_delete = id;
         },
         del: function del() {
             var _this = this;
@@ -50112,9 +50109,10 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-link text-danger",
+                  attrs: { "data-toggle": "modal", "data-target": "#Modal" },
                   on: {
                     click: function($event) {
-                      _vm.modal_show(article.id)
+                      _vm.article_to_delete = article.id
                     }
                   }
                 },
@@ -50292,9 +50290,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //переходим к редактированию статьи
             this.$router.push({ name: 'edit', params: { id: id } });
         },
-        modal_show: function modal_show() {
-            $('#Modal').modal({});
-        },
         del: function del() {
             var _this = this;
 
@@ -50352,7 +50347,10 @@ var render = function() {
           _vm._v(" "),
           _c(
             "button",
-            { staticClass: "btn btn-light", on: { click: _vm.modal_show } },
+            {
+              staticClass: "btn btn-light",
+              attrs: { "data-toggle": "modal", "data-target": "#Modal" }
+            },
             [_vm._v("Удалить")]
           )
         ])
@@ -50525,20 +50523,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
-        return {};
+        return {
+            title_value: '',
+            body_value: ''
+        };
     },
     props: ['id'],
     methods: {
         submit: function submit(e) {
             //оформление валидации
-            var article_form = document.getElementById('article_form');
             article_form.classList.add('was-validated');
             //если форма прошла валидацию
             if (article_form.checkValidity()) {
                 //вытаскиваем данные формы для AJAX
-                var bodyFormData = new FormData();
-                bodyFormData.set('title', $("#title_field").val());
-                bodyFormData.set('body', $("#body_field").val());
+                var formData = new FormData();
+                formData.set('title', this.title_value);
+                formData.set('body', this.body_value);
                 var router = this.$router;
                 //выбираем действие для создания/изменения статьи
                 var action = this.id ? this.id + '/edit' : 'create';
@@ -50546,7 +50546,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 axios({
                     method: 'post',
                     url: '/api/article/' + action,
-                    data: bodyFormData,
+                    data: formData,
                     config: { headers: { 'Content-Type': 'multipart/form-data' } }
                 }).then(function () {
                     router.push({ name: 'list' });
@@ -50566,8 +50566,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (vm.id) {
                 axios.get('api/article/' + vm.id).then(function (response) {
                     //получаем статью
-                    $('#title_field').val(response.data.title);
-                    $('#body_field').val(response.data.body);
+                    vm.title_value = response.data.title;
+                    vm.body_value = response.data.body;
                 });
             }
         });
@@ -50596,7 +50596,77 @@ var render = function() {
           },
           on: { submit: _vm.submit }
         },
-        [_vm._m(1), _vm._v(" "), _vm._m(2)]
+        [
+          _c("div", { staticClass: "form-group mt-3" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.title_value,
+                  expression: "title_value"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "text",
+                id: "title_field",
+                placeholder: "Заголовок",
+                required: ""
+              },
+              domProps: { value: _vm.title_value },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.title_value = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "invalid-feedback" }, [
+              _vm._v(
+                "\n                    Это обязательное поле!\n                "
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.body_value,
+                  expression: "body_value"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                id: "body_field",
+                rows: "10",
+                placeholder: "Статья",
+                required: ""
+              },
+              domProps: { value: _vm.body_value },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.body_value = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "invalid-feedback" }, [
+              _vm._v(
+                "\n                    Это обязательное поле!\n                "
+              )
+            ])
+          ])
+        ]
       ),
       _vm._v(" "),
       _c("div", { staticClass: "float-right" }, [
@@ -50623,46 +50693,6 @@ var staticRenderFns = [
     return _c("nav", { staticClass: "navbar navbar-dark bg-dark" }, [
       _c("span", { staticClass: "navbar-brand mb-0 h1" }, [
         _vm._v("Редактор статей")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group mt-3" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          id: "title_field",
-          placeholder: "Заголовок",
-          required: ""
-        }
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "invalid-feedback" }, [
-        _vm._v("\n                    Это обязательное поле!\n                ")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("textarea", {
-        staticClass: "form-control",
-        attrs: {
-          id: "body_field",
-          rows: "10",
-          placeholder: "Статья",
-          required: ""
-        }
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "invalid-feedback" }, [
-        _vm._v("\n                    Это обязательное поле!\n                ")
       ])
     ])
   }

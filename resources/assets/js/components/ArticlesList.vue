@@ -19,7 +19,8 @@
                     <hr>
                     <div class="float-right">
                         <button class="btn btn-link" @click='edit(article.id)'>Редактировать</button>
-                        <button class="btn btn-link text-danger" @click='modal_show(article.id)'>Удалить</button>
+                        <button class="btn btn-link text-danger" data-toggle="modal" data-target="#Modal"
+                        @click="article_to_delete=article.id">Удалить</button>
                     </div>
                  </div>
             </div>
@@ -56,10 +57,6 @@
             },
             edit: function (id) {
                 this.$router.push({name: 'edit', params: {id}});
-            },
-            modal_show: function(id){
-                $('#Modal').modal({});
-                this.article_to_delete=id;
             },
             del: function () {
                 axios.get('api/article/'+this.article_to_delete+'/delete')

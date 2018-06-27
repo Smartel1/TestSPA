@@ -12,7 +12,7 @@
                 <div class="form-group mt-3">
                     <input type="text" id="title_field"
                            placeholder="Заголовок" class="form-control"
-                           required/>
+                           v-model="title_value" required/>
                     <div class="invalid-feedback">
                         Это обязательное поле!
                     </div>
@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <textarea class="form-control" id="body_field"
                               rows="10" placeholder="Статья"
-                              required ></textarea>
+                              v-model="body_value" required ></textarea>
                     <div class="invalid-feedback">
                         Это обязательное поле!
                     </div>
@@ -38,20 +38,21 @@
     export default {
         data: function(){
             return {
+                title_value: '',
+                body_value: ''
             }
         },
         props: ['id'],
         methods:{
             submit: function (e) {
                 //оформление валидации
-                let article_form = document.getElementById('article_form');
                 article_form.classList.add('was-validated');
                 //если форма прошла валидацию
                 if (article_form.checkValidity()){
                     //вытаскиваем данные формы для AJAX
-                    let bodyFormData = new FormData();
-                    bodyFormData.set('title', $("#title_field").val());
-                    bodyFormData.set('body', $("#body_field").val());
+                    let formData = new FormData();
+                    formData.set('title', this.title_value);
+                    formData.set('body', this.body_value);
                     let router = this.$router;
                     //выбираем действие для создания/изменения статьи
                     let action = this.id? (this.id+'/edit'):'create';
@@ -59,7 +60,7 @@
                     axios({
                         method: 'post',
                         url: '/api/article/'+action,
-                        data: bodyFormData,
+                        data: formData,
                         config: { headers: {'Content-Type': 'multipart/form-data' }}
                     })  .then(function () {
                         router.push({name: 'list'});
@@ -80,8 +81,8 @@
                     axios.get('api/article/'+vm.id)
                         .then(response => {
                             //получаем статью
-                            $('#title_field').val(response.data.title);
-                            $('#body_field').val(response.data.body);
+                            vm.title_value=response.data.title;
+                            vm.body_value=response.data.body;
                         })
                 }
             })

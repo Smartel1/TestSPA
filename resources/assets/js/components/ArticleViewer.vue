@@ -7,7 +7,7 @@
             </router-link>
             <div>
                 <button class="btn btn-light" @click="edit(id)">Редактировать</button>
-                <button class="btn btn-light" @click="modal_show">Удалить</button>
+                <button class="btn btn-light" data-toggle="modal" data-target="#Modal">Удалить</button>
             </div>
         </nav>
         <!--                             тело новости                            -->
@@ -49,9 +49,6 @@
             edit: function (id) {
                 //переходим к редактированию статьи
                 this.$router.push({name: 'edit', params: {id}});
-            },
-            modal_show: function(){
-                $('#Modal').modal({});
             },
             del: function () {
                 //удаляем статью и возвращаемся "домой"
